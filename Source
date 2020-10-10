@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {      
+        static void Main()
+        {
+            int[] input = Console.ReadLine().Split().Select(int.Parse).ToArray();
+
+            int goatCount = input[0];
+            int maxMoves = input[1];
+            int[] goatWeight = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int[] weightMismatch = new int[maxMoves];
+            int averageMoveWeight = goatWeight.Sum()/maxMoves;            
+            goatWeight = goatWeight.OrderByDescending(c => c).ToArray();
+            for (int j = 0; j < maxMoves; j++)
+            {
+                int currentWeight = 0;
+                for (int i = 0; i < goatWeight.Length; i++)
+                {
+                    if ((currentWeight + goatWeight[i]) <= averageMoveWeight)
+                    {
+                        currentWeight += goatWeight[i];
+                        
+                        goatWeight[i] = 0;
+                    }               
+                }
+                weightMismatch[j] = currentWeight;
+            }
+            for (int i = 0; i < goatWeight.Length; i++)
+            {
+                int indexer = 0;
+                if (goatWeight[i]!=0)
+                {
+                    weightMismatch[maxMoves - 1-indexer] += goatWeight[i];
+                    indexer++;
+                }
+            }
+            weightMismatch = weightMismatch.OrderByDescending(c => c).ToArray();
+            Console.WriteLine(weightMismatch[0]);
+        }
+
+
+    }
+}
