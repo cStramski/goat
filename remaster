@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace telebid2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] input = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int goatCount = input[0];
+            int maxMoves = input[1];
+            int[] goatWeight = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            
+            int averageMoveWeight = (goatWeight.Sum() / maxMoves)-1;
+            goatWeight = goatWeight.OrderByDescending(c => c).ToArray();
+            int[] goatWeightCopy = new int[goatWeight.Length];
+            for (int i = 0; i < goatWeight.Length; i++)
+            {
+                goatWeightCopy[i] = goatWeight[i];
+            }
+            while (true)
+            {
+                averageMoveWeight++;
+                int takenGoats = 0;
+                for (int j = 0; j < maxMoves; j++)
+                {
+                    int currentWeight = 0;
+                    for (int i = 0; i < goatWeight.Length; i++)
+                    {
+                        if ((currentWeight + goatWeight[i]) <= averageMoveWeight)
+                        {
+                            currentWeight += goatWeight[i];
+
+                            if (goatWeight[i]!=0)
+                            {
+                                ++takenGoats;
+                            }
+                            goatWeight[i] = 0;
+                        }
+                    }
+                }
+                if (takenGoats == goatCount)
+                {
+                    break;
+                }
+                Array.Copy(goatWeightCopy, goatWeight,goatCount);               
+            }
+            Console.WriteLine(averageMoveWeight);
+        }
+    }
+}
